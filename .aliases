@@ -1,0 +1,16 @@
+function allstat() { svn status --ignore-externals  cfmain dr dr/sites/elp share/cfccomponents/ | grep -ve "^[\t ]*X"; }
+function alldiff() { svn diff $@ cfmain dr share/cfccomponents dr/sites/elp; }
+function allup()   { svn up $@ cfmain dr share/cfccomponents dr/sites/elp; }
+function allmerge() {
+ svn merge https://svn.peace.daveramsey.com/trunk/dr09 dr $*
+ svn merge https://svn.peace.daveramsey.com/trunk/elphub dr/sites/elp $*
+ svn merge https://svn.peace.daveramsey.com/trunk/cfccomponents share/cfccomponents $*
+ svn merge https://svn.peace.daveramsey.com/trunk/daveramsey_com cfmain $*
+ allstat
+} 
+function restartPS() {
+ sudo tomcatctl stop private-service
+ sudo rm -rf /var/tomcat/lampo/private-service/work/Catalina/localhost/*
+ sudo tomcatctl start private-service
+}
+
